@@ -13,7 +13,7 @@ Features:
 import subprocess
 import sys
 import importlib
-from memory_manager import MemoryManager
+from core.memory_manager import MemoryManager
 
 class DependencyManager:
 

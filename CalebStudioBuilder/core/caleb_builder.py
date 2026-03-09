@@ -8,9 +8,9 @@ Manages AI models, assets, and automations.
 import os
 import sys
 import subprocess
-from memory_manager import MemoryManager
-from file_manager import FileManager
-from dependency_manager import DependencyManager
+from core.memory_manager import MemoryManager
+from core.file_manager import FileManager
+from core.dependency_manager import DependencyManager
 
 class CalebBuilder:
 
