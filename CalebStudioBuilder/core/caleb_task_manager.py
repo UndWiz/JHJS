@@ -1,87 +1,72 @@
-"""
-CALEB TASK MANAGER
-==================
-Orchestrates tasks for CalebStudioBuilder.
-Handles AI engine setup, asset downloads, project scaffolding, and automation.
-"""
+# core/caleb_task_manager.py
 
 import os
 import subprocess
-from queue import Queue
-from threading import Thread
 from core.memory_manager import MemoryManager
+from core.dependency_manager import DependencyManager
+from core.caleb_builder import CalebBuilder
 
-class TaskManager:
+class CalebTaskManager:
+    """
+    Handles interpretation of text commands,
+    dispatches actions, and returns responses
+    for the CLI or GUI.
+    """
 
-    def __init__(self, project_root="~/CalebStudioProjects"):
-        self.project_root = os.path.expanduser(project_root)
-        self.task_queue = Queue()
+    def __init__(self):
         self.memory = MemoryManager()
-        self.completed_tasks = []
+        self.dependency_manager = DependencyManager(self.memory)
+        self.builder = CalebBuilder()
 
-    # ------------------------------
-    # 1. Add task to queue
-    # ------------------------------
-    def add_task(self, task_name, func, *args, **kwargs):
-        task = {"name": task_name, "func": func, "args": args, "kwargs": kwargs}
-        self.task_queue.put(task)
-        print(f"[TASK ADDED] {task_name}")
+    def handle_task(self, text, memory_manager=None, dependency_manager=None):
+        """
+        Interprets a string command and executes
+        builder actions accordingly.
+        """
 
-    # ------------------------------
-    # 2. Execute a single task
-    # ------------------------------
-    def execute_task(self, task):
-        name = task["name"]
-        try:
-            print(f"[EXECUTING] {name}")
-            task["func"](*task["args"], **task["kwargs"])
-            self.completed_tasks.append(name)
-            print(f"[COMPLETED] {name}")
-            self.memory.store_task(name, "success")
-        except Exception as e:
-            print(f"[ERROR] {name} → {e}")
-            self.memory.store_task(name, "failed", str(e))
+        command = text.lower().strip()
 
-    # ------------------------------
-    # 3. Worker for threading
-    # ------------------------------
-    def worker(self):
-        while not self.task_queue.empty():
-            task = self.task_queue.get()
-            self.execute_task(task)
-            self.task_queue.task_done()
+        # -----------------------
+        # Core commands
+        # -----------------------
 
-    # ------------------------------
-    # 4. Run all tasks
-    # ------------------------------
-    def run_all(self, threads=1):
-        print(f"[INFO] Running all tasks with {threads} thread(s)...")
-        thread_list = []
-        for _ in range(threads):
-            t = Thread(target=self.worker)
-            t.start()
-            thread_list.append(t)
+        if command == "help":
+            return (
+                "Available commands:\n"
+                "- help\n"
+                "- install dependencies\n"
+                "- setup project\n"
+                "- build basics\n"
+                "- show memory\n"
+                "- clear memory\n"
+                "- exit\n"
+            )
 
-        for t in thread_list:
-            t.join()
-        print("[SUCCESS] All tasks completed.")
+        # Install dependencies
+        if "install dependencies" in command:
+            self.dependency_manager.run_full_check()
+            return "Dependencies installation triggered."
 
-# ------------------------------
-# 5. Example placeholder tasks
-# ------------------------------
-def example_task_download_model(model_name):
-    print(f"Downloading {model_name} (placeholder)...")
-    # Replace with real download logic if needed
+        # Initialize studio folders
+        if "setup project" in command or "initialize" in command:
+            self.builder.run_build_pipeline()
+            return "Studio base directories and models setup started."
 
-def example_task_create_project(project_name):
-    print(f"Creating project folder {project_name} (placeholder)...")
-    os.makedirs(os.path.expanduser(f"~/CalebStudioProjects/{project_name}"), exist_ok=True)
+        # Show saved memory
+        if "show memory" in command:
+            mem = self.memory.get_memory()
+            if not mem:
+                return "Memory is currently empty."
+            return f"Memory contents:\n{mem}"
 
-# ------------------------------
-# 6. Test run
-# ------------------------------
-if __name__ == "__main__":
-    tm = TaskManager()
-    tm.add_task("Download SD 1.5", example_task_download_model, "stable_diffusion_1.5")
-    tm.add_task("Create Demo Project", example_task_create_project, "DemoProject")
-    tm.run_all(threads=2)
+        # Clear memory
+        if "clear memory" in command:
+            self.memory._initialize_memory()
+            return "Memory cleared."
+
+        # Exit command
+        if "exit" in command or "quit" in command:
+            return "Exiting task manager..."
+
+        # Fallback if nothing matched
+        return "Unknown command. Type 'help' for a list of commands."
