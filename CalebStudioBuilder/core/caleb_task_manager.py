@@ -1,87 +1,45 @@
-"""
-CALEB TASK MANAGER
-==================
-Orchestrates tasks for CalebStudioBuilder.
-Handles AI engine setup, asset downloads, project scaffolding, and automation.
-"""
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+		<title>Pastebin.com - Access Denied Warning</title>
+        <!-- Global site tag (gtag.js) - Google Analytics -->
 
-import os
-import subprocess
-from queue import Queue
-from threading import Thread
-from memory_manager import MemoryManager
+	</head> 
+	<body style="text-align: center;margin:10px 0 0 0;background-color:#E0E0E0;font-family:segoe ui,trebuchet MS,Lucida Sans Unicode,Lucida Sans,Sans-Serif">
+		<div style="margin: auto;background:#fff;width:485px;padding:25px;display:inline-block;border-radius:10px">
+			<div style="clear: both">
 
-class TaskManager:
+                <div style="width:80px;height:80px;margin: 0 auto">
+                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg"
+                         xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                         viewBox="0 0 497.472 497.472" style="enable-background:new 0 0 497.472 497.472;"
+                         xml:space="preserve">
 
-    def __init__(self, project_root="~/CalebStudioProjects"):
-        self.project_root = os.path.expanduser(project_root)
-        self.task_queue = Queue()
-        self.memory = MemoryManager()
-        self.completed_tasks = []
+                        <g transform="matrix(1.25 0 0 -1.25 0 45)">
+                            <g>
+                                <g>
+                                    <path style="fill:#FFCC4D;" d="M24.374-357.857c-20.958,0-30.197,15.223-20.548,33.826L181.421,17.928
+                                        c9.648,18.603,25.463,18.603,35.123,0L394.14-324.031c9.671-18.603,0.421-33.826-20.548-33.826H24.374z"/>
+                                    <path style="fill:#231F20;" d="M173.605-80.922c0,14.814,10.934,23.984,25.395,23.984c14.12,0,25.407-9.512,25.407-23.984
+                                        V-216.75c0-14.461-11.287-23.984-25.407-23.984c-14.461,0-25.395,9.182-25.395,23.984V-80.922z M171.489-289.056
+                                        c0,15.167,12.345,27.511,27.511,27.511c15.167,0,27.523-12.345,27.523-27.511c0-15.178-12.356-27.523-27.523-27.523
+                                        C183.834-316.579,171.489-304.234,171.489-289.056"/>
+                                </g>
+                            </g>
+                        </g>
 
-    # ------------------------------
-    # 1. Add task to queue
-    # ------------------------------
-    def add_task(self, task_name, func, *args, **kwargs):
-        task = {"name": task_name, "func": func, "args": args, "kwargs": kwargs}
-        self.task_queue.put(task)
-        print(f"[TASK ADDED] {task_name}")
+                    </svg>
+                </div>
 
-    # ------------------------------
-    # 2. Execute a single task
-    # ------------------------------
-    def execute_task(self, task):
-        name = task["name"]
-        try:
-            print(f"[EXECUTING] {name}")
-            task["func"](*task["args"], **task["kwargs"])
-            self.completed_tasks.append(name)
-            print(f"[COMPLETED] {name}")
-            self.memory.store_task(name, "success")
-        except Exception as e:
-            print(f"[ERROR] {name} → {e}")
-            self.memory.store_task(name, "failed", str(e))
-
-    # ------------------------------
-    # 3. Worker for threading
-    # ------------------------------
-    def worker(self):
-        while not self.task_queue.empty():
-            task = self.task_queue.get()
-            self.execute_task(task)
-            self.task_queue.task_done()
-
-    # ------------------------------
-    # 4. Run all tasks
-    # ------------------------------
-    def run_all(self, threads=1):
-        print(f"[INFO] Running all tasks with {threads} thread(s)...")
-        thread_list = []
-        for _ in range(threads):
-            t = Thread(target=self.worker)
-            t.start()
-            thread_list.append(t)
-
-        for t in thread_list:
-            t.join()
-        print("[SUCCESS] All tasks completed.")
-
-# ------------------------------
-# 5. Example placeholder tasks
-# ------------------------------
-def example_task_download_model(model_name):
-    print(f"Downloading {model_name} (placeholder)...")
-    # Replace with real download logic if needed
-
-def example_task_create_project(project_name):
-    print(f"Creating project folder {project_name} (placeholder)...")
-    os.makedirs(os.path.expanduser(f"~/CalebStudioProjects/{project_name}"), exist_ok=True)
-
-# ------------------------------
-# 6. Test run
-# ------------------------------
-if __name__ == "__main__":
-    tm = TaskManager()
-    tm.add_task("Download SD 1.5", example_task_download_model, "stable_diffusion_1.5")
-    tm.add_task("Create Demo Project", example_task_create_project, "DemoProject")
-    tm.run_all(threads=2)
+			 	<h2 style="color:#181818;font-size:140%">Pastebin.com has blocked your IP</h2>
+			 	<h3 style="color:#181818;font-size:100%;font-weight:normal">We have <i>temporarily</i> blocked your IP from accessing our website because we have <i><b>detected unnatural browsing behavior</b></i>.</h3>
+					
+				<div style="border:3px dotted #C03;background:#f9f9f9;padding:5px 10px;border-radius:5px">
+					<h3 style="color:#181818;font-size: 100%;font-weight:normal">If you are trying to <b>scrape</b> our website, your IP will be blocked, we recommend that you contact <a href="/cdn-cgi/l/email-protection#87f4e6ebe2f4c7f7e6f4f3e2e5eee9a9e4e8ea" style="color:#C03"><span class="__cf_email__" data-cfemail="2f5c4e434a5c6f5f4e5c5b4a4d4641014c4042">[email&#160;protected]</span></a> for a possible solution.</h3>
+					<div style="text-align:right">Thanks, The Pastebin Team</div>
+				</div>
+			</div>
+		</div>
+	<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script></body>
+</html>

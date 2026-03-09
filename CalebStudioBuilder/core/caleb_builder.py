@@ -1,97 +1,45 @@
-"""
-CALEB BUILDER
-=============
-Engine that builds Jack Hole Jackery Studio locally.
-Manages AI models, assets, and automations.
-"""
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+		<title>Pastebin.com - Access Denied Warning</title>
+        <!-- Global site tag (gtag.js) - Google Analytics -->
 
-import os
-import sys
-import subprocess
-from memory_manager import MemoryManager
-from file_manager import FileManager
-from dependency_manager import DependencyManager
+	</head> 
+	<body style="text-align: center;margin:10px 0 0 0;background-color:#E0E0E0;font-family:segoe ui,trebuchet MS,Lucida Sans Unicode,Lucida Sans,Sans-Serif">
+		<div style="margin: auto;background:#fff;width:485px;padding:25px;display:inline-block;border-radius:10px">
+			<div style="clear: both">
 
-class CalebBuilder:
+                <div style="width:80px;height:80px;margin: 0 auto">
+                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg"
+                         xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                         viewBox="0 0 497.472 497.472" style="enable-background:new 0 0 497.472 497.472;"
+                         xml:space="preserve">
 
-    def __init__(self, project_root="~/CalebStudioProjects", enable_cloud_mentor=False):
-        self.project_root = os.path.expanduser(project_root)
-        self.caleb_core = os.path.join(self.project_root, "CalebCore")
-        self.memory = MemoryManager()
-        self.file_manager = FileManager(self.memory)
-        self.dependency_manager = DependencyManager(self.memory)
-        self.enable_cloud_mentor = enable_cloud_mentor
-        self.models_folder = os.path.join(self.caleb_core, "models")
-        self.temp_folder = os.path.join(self.caleb_core, "temp")
+                        <g transform="matrix(1.25 0 0 -1.25 0 45)">
+                            <g>
+                                <g>
+                                    <path style="fill:#FFCC4D;" d="M24.374-357.857c-20.958,0-30.197,15.223-20.548,33.826L181.421,17.928
+                                        c9.648,18.603,25.463,18.603,35.123,0L394.14-324.031c9.671-18.603,0.421-33.826-20.548-33.826H24.374z"/>
+                                    <path style="fill:#231F20;" d="M173.605-80.922c0,14.814,10.934,23.984,25.395,23.984c14.12,0,25.407-9.512,25.407-23.984
+                                        V-216.75c0-14.461-11.287-23.984-25.407-23.984c-14.461,0-25.395,9.182-25.395,23.984V-80.922z M171.489-289.056
+                                        c0,15.167,12.345,27.511,27.511,27.511c15.167,0,27.523-12.345,27.523-27.511c0-15.178-12.356-27.523-27.523-27.523
+                                        C183.834-316.579,171.489-304.234,171.489-289.056"/>
+                                </g>
+                            </g>
+                        </g>
 
-    # ------------------------------
-    # 1. Prepare directories
-    # ------------------------------
-    def setup_directories(self):
-        print(f"[INFO] Preparing directories under {self.caleb_core}...")
-        self.file_manager.create_folder(self.models_folder)
-        self.file_manager.create_folder(self.temp_folder)
-        print("[SUCCESS] Core directories ready.")
+                    </svg>
+                </div>
 
-    # ------------------------------
-    # 2. Install or verify models
-    # ------------------------------
-    def install_models(self):
-        print("[INFO] Installing AI models...")
-        model_urls = {
-            "stable_diffusion_1.5": "https://huggingface.co/CompVis/stable-diffusion-v1-5",
-            "stable_diffusion_2.1": "https://huggingface.co/stabilityai/stable-diffusion-2-1",
-            "sdxl_base": "https://huggingface.co/stabilityai/sdxl-base",
-            "anim_diff": "https://huggingface.co/animate-diff/anim-diffusion"
-        }
-
-        for name, url in model_urls.items():
-            model_path = os.path.join(self.models_folder, name)
-            if not os.path.exists(model_path):
-                print(f"[INFO] Downloading {name} from {url}...")
-                subprocess.run(["git", "clone", url, model_path])
-            else:
-                print(f"[INFO] {name} already exists.")
-
-        print("[SUCCESS] AI models ready.")
-
-    # ------------------------------
-    # 3. Prepare AI engines
-    # ------------------------------
-    def prepare_engines(self):
-        print("[INFO] Preparing AI engines...")
-        # Example placeholders; extend with your full engine logic
-        engines = ["image_gen", "video_gen", "audio_gen"]
-        for eng in engines:
-            print(f"[INFO] Engine '{eng}' is online (placeholder).")
-        print("[SUCCESS] All engines online.")
-
-    # ------------------------------
-    # 4. Cloud Mentor integration
-    # ------------------------------
-    def cloud_mentor_integration(self):
-        if self.enable_cloud_mentor:
-            print("[INFO] Cloud Mentor activated.")
-            # Placeholder: download/init cloud mentor configs
-            cloud_config = os.path.join(self.caleb_core, "cloud_mentor")
-            os.makedirs(cloud_config, exist_ok=True)
-            print("[SUCCESS] Cloud Mentor ready.")
-
-    # ------------------------------
-    # 5. Run build pipeline
-    # ------------------------------
-    def run_build_pipeline(self):
-        print("[INFO] Starting Caleb build pipeline...")
-        self.setup_directories()
-        self.install_models()
-        self.prepare_engines()
-        self.cloud_mentor_integration()
-        print("[SUCCESS] Caleb has prepared Jack Hole Jackery Studio core environment!")
-
-    # ------------------------------
-    # 6. Entry point
-    # ------------------------------
-if __name__ == "__main__":
-    enable_cloud = input("Enable Cloud Mentor? (y/N): ").strip().lower() == "y"
-    builder = CalebBuilder(enable_cloud_mentor=enable_cloud)
-    builder.run_build_pipeline()
+			 	<h2 style="color:#181818;font-size:140%">Pastebin.com has blocked your IP</h2>
+			 	<h3 style="color:#181818;font-size:100%;font-weight:normal">We have <i>temporarily</i> blocked your IP from accessing our website because we have <i><b>detected unnatural browsing behavior</b></i>.</h3>
+					
+				<div style="border:3px dotted #C03;background:#f9f9f9;padding:5px 10px;border-radius:5px">
+					<h3 style="color:#181818;font-size: 100%;font-weight:normal">If you are trying to <b>scrape</b> our website, your IP will be blocked, we recommend that you contact <a href="/cdn-cgi/l/email-protection#9ae9fbf6ffe9daeafbe9eefff8f3f4b4f9f5f7" style="color:#C03"><span class="__cf_email__" data-cfemail="c4b7a5a8a1b784b4a5b7b0a1a6adaaeaa7aba9">[email&#160;protected]</span></a> for a possible solution.</h3>
+					<div style="text-align:right">Thanks, The Pastebin Team</div>
+				</div>
+			</div>
+		</div>
+	<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script></body>
+</html>

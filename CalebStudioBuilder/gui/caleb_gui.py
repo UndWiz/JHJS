@@ -1,102 +1,45 @@
-# caleb_gui.py
-import sys
-from PyQt6.QtWidgets import (
-    QApplication, QWidget, QVBoxLayout, QHBoxLayout, QTextEdit,
-    QLineEdit, QPushButton, QLabel, QComboBox, QListWidget, QListWidgetItem
-)
-from PyQt6.QtCore import Qt, QTimer
-from core.caleb_task_manager import CalebTaskManager
-from core.memory_manager import MemoryManager
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+		<title>Pastebin.com - Access Denied Warning</title>
+        <!-- Global site tag (gtag.js) - Google Analytics -->
 
-class CalebGUI(QWidget):
-    def __init__(self):
-        super().__init__()
-        self.setWindowTitle("Caleb Studio Builder - Chat Interface")
-        self.setGeometry(200, 200, 800, 600)
+	</head> 
+	<body style="text-align: center;margin:10px 0 0 0;background-color:#E0E0E0;font-family:segoe ui,trebuchet MS,Lucida Sans Unicode,Lucida Sans,Sans-Serif">
+		<div style="margin: auto;background:#fff;width:485px;padding:25px;display:inline-block;border-radius:10px">
+			<div style="clear: both">
 
-        # Core backend
-        self.task_manager = CalebTaskManager()
-        self.memory_manager = MemoryManager()
+                <div style="width:80px;height:80px;margin: 0 auto">
+                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg"
+                         xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                         viewBox="0 0 497.472 497.472" style="enable-background:new 0 0 497.472 497.472;"
+                         xml:space="preserve">
 
-        # Layouts
-        self.main_layout = QVBoxLayout()
-        self.setLayout(self.main_layout)
+                        <g transform="matrix(1.25 0 0 -1.25 0 45)">
+                            <g>
+                                <g>
+                                    <path style="fill:#FFCC4D;" d="M24.374-357.857c-20.958,0-30.197,15.223-20.548,33.826L181.421,17.928
+                                        c9.648,18.603,25.463,18.603,35.123,0L394.14-324.031c9.671-18.603,0.421-33.826-20.548-33.826H24.374z"/>
+                                    <path style="fill:#231F20;" d="M173.605-80.922c0,14.814,10.934,23.984,25.395,23.984c14.12,0,25.407-9.512,25.407-23.984
+                                        V-216.75c0-14.461-11.287-23.984-25.407-23.984c-14.461,0-25.395,9.182-25.395,23.984V-80.922z M171.489-289.056
+                                        c0,15.167,12.345,27.511,27.511,27.511c15.167,0,27.523-12.345,27.523-27.511c0-15.178-12.356-27.523-27.523-27.523
+                                        C183.834-316.579,171.489-304.234,171.489-289.056"/>
+                                </g>
+                            </g>
+                        </g>
 
-        self.create_model_selector()
-        self.create_chat_display()
-        self.create_input_area()
-        self.create_memory_buttons()
+                    </svg>
+                </div>
 
-    def create_model_selector(self):
-        layout = QHBoxLayout()
-        label = QLabel("Active Model:")
-        self.model_dropdown = QComboBox()
-        self.model_dropdown.addItems(["Caleb-Creative", "Caleb-Technical", "Caleb-Audio/Video"])
-        layout.addWidget(label)
-        layout.addWidget(self.model_dropdown)
-        self.main_layout.addLayout(layout)
-
-    def create_chat_display(self):
-        self.chat_display = QTextEdit()
-        self.chat_display.setReadOnly(True)
-        self.main_layout.addWidget(self.chat_display)
-
-    def create_input_area(self):
-        layout = QHBoxLayout()
-        self.input_field = QLineEdit()
-        self.input_field.setPlaceholderText("Type your command or question here...")
-        self.send_button = QPushButton("Send")
-        self.send_button.clicked.connect(self.send_message)
-        layout.addWidget(self.input_field)
-        layout.addWidget(self.send_button)
-        self.main_layout.addLayout(layout)
-
-    def create_memory_buttons(self):
-        layout = QHBoxLayout()
-        self.save_button = QPushButton("Save to Memory")
-        self.save_button.clicked.connect(self.save_memory)
-        self.forget_button = QPushButton("Forget Selected")
-        self.forget_button.clicked.connect(self.forget_memory)
-        self.memory_list = QListWidget()
-        layout.addWidget(self.save_button)
-        layout.addWidget(self.forget_button)
-        layout.addWidget(self.memory_list)
-        self.main_layout.addLayout(layout)
-        self.refresh_memory_list()
-
-    def send_message(self):
-        user_input = self.input_field.text().strip()
-        if not user_input:
-            return
-        self.chat_display.append(f"<b>You:</b> {user_input}")
-
-        # Send to CalebTaskManager
-        model = self.model_dropdown.currentText()
-        response = self.task_manager.process_command(user_input, model)
-
-        self.chat_display.append(f"<b>{model}:</b> {response}")
-        self.input_field.clear()
-
-    def save_memory(self):
-        text = self.input_field.text().strip()
-        if text:
-            self.memory_manager.save(text)
-            self.refresh_memory_list()
-            self.input_field.clear()
-
-    def forget_memory(self):
-        selected_items = self.memory_list.selectedItems()
-        for item in selected_items:
-            self.memory_manager.delete(item.text())
-        self.refresh_memory_list()
-
-    def refresh_memory_list(self):
-        self.memory_list.clear()
-        for entry in self.memory_manager.get_all():
-            self.memory_list.addItem(QListWidgetItem(entry))
-
-if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    gui = CalebGUI()
-    gui.show()
-    sys.exit(app.exec())
+			 	<h2 style="color:#181818;font-size:140%">Pastebin.com has blocked your IP</h2>
+			 	<h3 style="color:#181818;font-size:100%;font-weight:normal">We have <i>temporarily</i> blocked your IP from accessing our website because we have <i><b>detected unnatural browsing behavior</b></i>.</h3>
+					
+				<div style="border:3px dotted #C03;background:#f9f9f9;padding:5px 10px;border-radius:5px">
+					<h3 style="color:#181818;font-size: 100%;font-weight:normal">If you are trying to <b>scrape</b> our website, your IP will be blocked, we recommend that you contact <a href="/cdn-cgi/l/email-protection#4a392b262f390a3a2b393e2f28232464292527" style="color:#C03"><span class="__cf_email__" data-cfemail="e59684898096a59584969180878c8bcb868a88">[email&#160;protected]</span></a> for a possible solution.</h3>
+					<div style="text-align:right">Thanks, The Pastebin Team</div>
+				</div>
+			</div>
+		</div>
+	<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script></body>
+</html>

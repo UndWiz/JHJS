@@ -1,99 +1,45 @@
-"""
-model_manager.py
-----------------
-Handles loading, registering, and switching AI models for Caleb.
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+		<title>Pastebin.com - Access Denied Warning</title>
+        <!-- Global site tag (gtag.js) - Google Analytics -->
 
-Capabilities:
-- Multi-model orchestration (image, video, LLM, TTS)
-- Dynamic loading of local and cloud models
-- Shared memory registration for context continuity
-- Specialized doppelgangers for different tasks
-"""
+	</head> 
+	<body style="text-align: center;margin:10px 0 0 0;background-color:#E0E0E0;font-family:segoe ui,trebuchet MS,Lucida Sans Unicode,Lucida Sans,Sans-Serif">
+		<div style="margin: auto;background:#fff;width:485px;padding:25px;display:inline-block;border-radius:10px">
+			<div style="clear: both">
 
-import os
-from pathlib import Path
-from typing import Dict, Optional
+                <div style="width:80px;height:80px;margin: 0 auto">
+                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg"
+                         xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                         viewBox="0 0 497.472 497.472" style="enable-background:new 0 0 497.472 497.472;"
+                         xml:space="preserve">
 
-# Import ML frameworks
-try:
-    import torch
-    from diffusers import StableDiffusionPipeline
-except ImportError:
-    torch = None
-    StableDiffusionPipeline = None
+                        <g transform="matrix(1.25 0 0 -1.25 0 45)">
+                            <g>
+                                <g>
+                                    <path style="fill:#FFCC4D;" d="M24.374-357.857c-20.958,0-30.197,15.223-20.548,33.826L181.421,17.928
+                                        c9.648,18.603,25.463,18.603,35.123,0L394.14-324.031c9.671-18.603,0.421-33.826-20.548-33.826H24.374z"/>
+                                    <path style="fill:#231F20;" d="M173.605-80.922c0,14.814,10.934,23.984,25.395,23.984c14.12,0,25.407-9.512,25.407-23.984
+                                        V-216.75c0-14.461-11.287-23.984-25.407-23.984c-14.461,0-25.395,9.182-25.395,23.984V-80.922z M171.489-289.056
+                                        c0,15.167,12.345,27.511,27.511,27.511c15.167,0,27.523-12.345,27.523-27.511c0-15.178-12.356-27.523-27.523-27.523
+                                        C183.834-316.579,171.489-304.234,171.489-289.056"/>
+                                </g>
+                            </g>
+                        </g>
 
-try:
-    from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
-except ImportError:
-    AutoModelForCausalLM = None
-    AutoTokenizer = None
+                    </svg>
+                </div>
 
-# Placeholder for shared memory registration
-shared_memory: Dict[str, dict] = {}
-
-class ModelManager:
-    """
-    Handles all AI model orchestration for Caleb.
-    """
-
-    def __init__(self, model_path: Optional[str] = None):
-        self.models: Dict[str, object] = {}  # Holds model objects
-        self.model_paths: Dict[str, str] = {}  # Holds model paths
-        self.active_model: Optional[str] = None
-        self.model_path = Path(model_path) if model_path else Path("./models")
-        self.model_path.mkdir(exist_ok=True)
-        print(f"[ModelManager] Initialized. Model path: {self.model_path.resolve()}")
-
-    def load_sd_model(self, model_name: str, local_path: Optional[str] = None):
-        """Load a Stable Diffusion model (local or cloud)."""
-        path = local_path or str(self.model_path / model_name)
-        print(f"[ModelManager] Loading SD model '{model_name}' from {path}")
-        if StableDiffusionPipeline is None:
-            raise ImportError("diffusers not installed")
-        model = StableDiffusionPipeline.from_pretrained(path)
-        self.models[model_name] = model
-        self.model_paths[model_name] = path
-        self.register_in_memory(model_name, "image")
-        print(f"[ModelManager] SD model '{model_name}' loaded successfully.")
-
-    def load_llm_model(self, model_name: str, local_path: Optional[str] = None):
-        """Load a language model (local or cloud)."""
-        path = local_path or str(self.model_path / model_name)
-        print(f"[ModelManager] Loading LLM '{model_name}' from {path}")
-        if AutoModelForCausalLM is None:
-            raise ImportError("transformers not installed")
-        tokenizer = AutoTokenizer.from_pretrained(path)
-        model = AutoModelForCausalLM.from_pretrained(path)
-        self.models[model_name] = {"model": model, "tokenizer": tokenizer}
-        self.model_paths[model_name] = path
-        self.register_in_memory(model_name, "llm")
-        print(f"[ModelManager] LLM '{model_name}' loaded successfully.")
-
-    def switch_model(self, model_name: str):
-        """Switch the active model."""
-        if model_name not in self.models:
-            raise ValueError(f"Model '{model_name}' is not loaded")
-        self.active_model = model_name
-        print(f"[ModelManager] Active model switched to '{model_name}'")
-
-    def get_active_model(self):
-        """Return the currently active model object."""
-        if self.active_model is None:
-            raise ValueError("No active model selected")
-        return self.models[self.active_model]
-
-    def register_in_memory(self, model_name: str, model_type: str):
-        """Register the model in shared memory for all agents."""
-        shared_memory[model_name] = {"type": model_type, "path": self.model_paths[model_name]}
-        print(f"[ModelManager] Model '{model_name}' registered in shared memory as '{model_type}'")
-
-    def list_models(self):
-        """List all loaded models."""
-        return list(self.models.keys())
-
-# Example usage (for testing only)
-if __name__ == "__main__":
-    mm = ModelManager()
-    # mm.load_sd_model("stable-diffusion-1.5")   # Uncomment if local SD model exists
-    # mm.load_llm_model("llama2-7b")             # Uncomment if local LLM exists
-    print("[ModelManager] Loaded models:", mm.list_models())
+			 	<h2 style="color:#181818;font-size:140%">Pastebin.com has blocked your IP</h2>
+			 	<h3 style="color:#181818;font-size:100%;font-weight:normal">We have <i>temporarily</i> blocked your IP from accessing our website because we have <i><b>detected unnatural browsing behavior</b></i>.</h3>
+					
+				<div style="border:3px dotted #C03;background:#f9f9f9;padding:5px 10px;border-radius:5px">
+					<h3 style="color:#181818;font-size: 100%;font-weight:normal">If you are trying to <b>scrape</b> our website, your IP will be blocked, we recommend that you contact <a href="/cdn-cgi/l/email-protection#1a697b767f695a6a7b696e7f78737434797577" style="color:#C03"><span class="__cf_email__" data-cfemail="ccbfada0a9bf8cbcadbfb8a9aea5a2e2afa3a1">[email&#160;protected]</span></a> for a possible solution.</h3>
+					<div style="text-align:right">Thanks, The Pastebin Team</div>
+				</div>
+			</div>
+		</div>
+	<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script></body>
+</html>

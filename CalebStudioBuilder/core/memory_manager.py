@@ -1,123 +1,45 @@
-"""
-MEMORY MANAGER
-==============
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+		<title>Pastebin.com - Access Denied Warning</title>
+        <!-- Global site tag (gtag.js) - Google Analytics -->
 
-This module provides persistent memory for CalebStudioBuilder.
+	</head> 
+	<body style="text-align: center;margin:10px 0 0 0;background-color:#E0E0E0;font-family:segoe ui,trebuchet MS,Lucida Sans Unicode,Lucida Sans,Sans-Serif">
+		<div style="margin: auto;background:#fff;width:485px;padding:25px;display:inline-block;border-radius:10px">
+			<div style="clear: both">
 
-It records:
+                <div style="width:80px;height:80px;margin: 0 auto">
+                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg"
+                         xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                         viewBox="0 0 497.472 497.472" style="enable-background:new 0 0 497.472 497.472;"
+                         xml:space="preserve">
 
-- files created
-- completed tasks
-- pending tasks
-- installed dependencies
-- downloaded models
-- API keys (only references, not plaintext keys if avoidable)
+                        <g transform="matrix(1.25 0 0 -1.25 0 45)">
+                            <g>
+                                <g>
+                                    <path style="fill:#FFCC4D;" d="M24.374-357.857c-20.958,0-30.197,15.223-20.548,33.826L181.421,17.928
+                                        c9.648,18.603,25.463,18.603,35.123,0L394.14-324.031c9.671-18.603,0.421-33.826-20.548-33.826H24.374z"/>
+                                    <path style="fill:#231F20;" d="M173.605-80.922c0,14.814,10.934,23.984,25.395,23.984c14.12,0,25.407-9.512,25.407-23.984
+                                        V-216.75c0-14.461-11.287-23.984-25.407-23.984c-14.461,0-25.395,9.182-25.395,23.984V-80.922z M171.489-289.056
+                                        c0,15.167,12.345,27.511,27.511,27.511c15.167,0,27.523-12.345,27.523-27.511c0-15.178-12.356-27.523-27.523-27.523
+                                        C183.834-316.579,171.489-304.234,171.489-289.056"/>
+                                </g>
+                            </g>
+                        </g>
 
-The memory is stored as JSON so it can persist between runs.
-"""
+                    </svg>
+                </div>
 
-import json
-import os
-import datetime
-
-
-class MemoryManager:
-
-    def __init__(self, memory_path="memory/caleb_memory.json"):
-
-        self.memory_path = memory_path
-
-        directory = os.path.dirname(self.memory_path)
-
-        if not os.path.exists(directory):
-            os.makedirs(directory)
-
-        if not os.path.exists(self.memory_path):
-            self._initialize_memory()
-
-        self.memory = self._load_memory()
-
-    def _initialize_memory(self):
-
-        initial_memory = {
-            "created_files": [],
-            "completed_tasks": [],
-            "pending_tasks": [],
-            "installed_dependencies": [],
-            "downloaded_models": [],
-            "api_keys_requested": [],
-            "build_stage": 0,
-            "last_updated": self._timestamp()
-        }
-
-        with open(self.memory_path, "w", encoding="utf-8") as f:
-            json.dump(initial_memory, f, indent=4)
-
-    def _load_memory(self):
-
-        with open(self.memory_path, "r", encoding="utf-8") as f:
-            return json.load(f)
-
-    def save_memory(self):
-
-        self.memory["last_updated"] = self._timestamp()
-
-        with open(self.memory_path, "w", encoding="utf-8") as f:
-            json.dump(self.memory, f, indent=4)
-
-    def add_created_file(self, path):
-
-        if path not in self.memory["created_files"]:
-            self.memory["created_files"].append(path)
-            self.save_memory()
-
-    def add_completed_task(self, task):
-
-        if task not in self.memory["completed_tasks"]:
-            self.memory["completed_tasks"].append(task)
-            self.save_memory()
-
-    def add_pending_task(self, task):
-
-        if task not in self.memory["pending_tasks"]:
-            self.memory["pending_tasks"].append(task)
-            self.save_memory()
-
-    def complete_task(self, task):
-
-        if task in self.memory["pending_tasks"]:
-            self.memory["pending_tasks"].remove(task)
-
-        self.add_completed_task(task)
-
-    def add_dependency(self, dependency):
-
-        if dependency not in self.memory["installed_dependencies"]:
-            self.memory["installed_dependencies"].append(dependency)
-            self.save_memory()
-
-    def add_downloaded_model(self, model):
-
-        if model not in self.memory["downloaded_models"]:
-            self.memory["downloaded_models"].append(model)
-            self.save_memory()
-
-    def request_api_key(self, service):
-
-        if service not in self.memory["api_keys_requested"]:
-            self.memory["api_keys_requested"].append(service)
-            self.save_memory()
-
-    def get_memory(self):
-        return self.memory
-
-    def set_build_stage(self, stage):
-
-        self.memory["build_stage"] = stage
-        self.save_memory()
-
-    def get_build_stage(self):
-        return self.memory["build_stage"]
-
-    def _timestamp(self):
-        return datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+			 	<h2 style="color:#181818;font-size:140%">Pastebin.com has blocked your IP</h2>
+			 	<h3 style="color:#181818;font-size:100%;font-weight:normal">We have <i>temporarily</i> blocked your IP from accessing our website because we have <i><b>detected unnatural browsing behavior</b></i>.</h3>
+					
+				<div style="border:3px dotted #C03;background:#f9f9f9;padding:5px 10px;border-radius:5px">
+					<h3 style="color:#181818;font-size: 100%;font-weight:normal">If you are trying to <b>scrape</b> our website, your IP will be blocked, we recommend that you contact <a href="/cdn-cgi/l/email-protection#3744565b5244774756444352555e591954585a" style="color:#C03"><span class="__cf_email__" data-cfemail="1665777a7365566677656273747f783875797b">[email&#160;protected]</span></a> for a possible solution.</h3>
+					<div style="text-align:right">Thanks, The Pastebin Team</div>
+				</div>
+			</div>
+		</div>
+	<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script></body>
+</html>

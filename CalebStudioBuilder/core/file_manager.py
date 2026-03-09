@@ -1,106 +1,45 @@
-"""
-FILE MANAGER
-============
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+		<title>Pastebin.com - Access Denied Warning</title>
+        <!-- Global site tag (gtag.js) - Google Analytics -->
 
-This module safely handles all file and directory creation for
-CalebStudioBuilder.
+	</head> 
+	<body style="text-align: center;margin:10px 0 0 0;background-color:#E0E0E0;font-family:segoe ui,trebuchet MS,Lucida Sans Unicode,Lucida Sans,Sans-Serif">
+		<div style="margin: auto;background:#fff;width:485px;padding:25px;display:inline-block;border-radius:10px">
+			<div style="clear: both">
 
-It prevents:
+                <div style="width:80px;height:80px;margin: 0 auto">
+                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg"
+                         xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                         viewBox="0 0 497.472 497.472" style="enable-background:new 0 0 497.472 497.472;"
+                         xml:space="preserve">
 
-- overwriting existing files
-- broken directory paths
-- unsafe writes
-- missing folders
+                        <g transform="matrix(1.25 0 0 -1.25 0 45)">
+                            <g>
+                                <g>
+                                    <path style="fill:#FFCC4D;" d="M24.374-357.857c-20.958,0-30.197,15.223-20.548,33.826L181.421,17.928
+                                        c9.648,18.603,25.463,18.603,35.123,0L394.14-324.031c9.671-18.603,0.421-33.826-20.548-33.826H24.374z"/>
+                                    <path style="fill:#231F20;" d="M173.605-80.922c0,14.814,10.934,23.984,25.395,23.984c14.12,0,25.407-9.512,25.407-23.984
+                                        V-216.75c0-14.461-11.287-23.984-25.407-23.984c-14.461,0-25.395,9.182-25.395,23.984V-80.922z M171.489-289.056
+                                        c0,15.167,12.345,27.511,27.511,27.511c15.167,0,27.523-12.345,27.523-27.511c0-15.178-12.356-27.523-27.523-27.523
+                                        C183.834-316.579,171.489-304.234,171.489-289.056"/>
+                                </g>
+                            </g>
+                        </g>
 
-All builder systems must use this module when creating files.
-"""
+                    </svg>
+                </div>
 
-import os
-import datetime
-
-
-class FileManager:
-
-    def __init__(self, base_path="studio"):
-        """
-        Initialize the file manager.
-        """
-        self.base_path = base_path
-
-        if not os.path.exists(self.base_path):
-            os.makedirs(self.base_path)
-
-    def create_directory(self, path):
-        """
-        Create a directory safely.
-        """
-        full_path = os.path.join(self.base_path, path)
-
-        if not os.path.exists(full_path):
-            os.makedirs(full_path)
-            print(f"[FileManager] Created directory: {full_path}")
-        else:
-            print(f"[FileManager] Directory already exists: {full_path}")
-
-    def write_file(self, path, content):
-        """
-        Write a file safely without overwriting existing files.
-        """
-
-        full_path = os.path.join(self.base_path, path)
-
-        directory = os.path.dirname(full_path)
-
-        if not os.path.exists(directory):
-            os.makedirs(directory)
-
-        if os.path.exists(full_path):
-            print(f"[FileManager] File already exists, skipping: {full_path}")
-            return False
-
-        with open(full_path, "w", encoding="utf-8") as f:
-            f.write(content)
-
-        print(f"[FileManager] Created file: {full_path}")
-        return True
-
-    def append_file(self, path, content):
-        """
-        Append data to a file.
-        """
-
-        full_path = os.path.join(self.base_path, path)
-
-        directory = os.path.dirname(full_path)
-
-        if not os.path.exists(directory):
-            os.makedirs(directory)
-
-        with open(full_path, "a", encoding="utf-8") as f:
-            f.write(content)
-
-        print(f"[FileManager] Appended to file: {full_path}")
-
-    def file_exists(self, path):
-        """
-        Check if a file exists.
-        """
-        full_path = os.path.join(self.base_path, path)
-        return os.path.exists(full_path)
-
-    def list_files(self, path=""):
-        """
-        List files in a directory.
-        """
-        full_path = os.path.join(self.base_path, path)
-
-        if not os.path.exists(full_path):
-            return []
-
-        return os.listdir(full_path)
-
-    def timestamp(self):
-        """
-        Return current timestamp string.
-        """
-        return datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+			 	<h2 style="color:#181818;font-size:140%">Pastebin.com has blocked your IP</h2>
+			 	<h3 style="color:#181818;font-size:100%;font-weight:normal">We have <i>temporarily</i> blocked your IP from accessing our website because we have <i><b>detected unnatural browsing behavior</b></i>.</h3>
+					
+				<div style="border:3px dotted #C03;background:#f9f9f9;padding:5px 10px;border-radius:5px">
+					<h3 style="color:#181818;font-size: 100%;font-weight:normal">If you are trying to <b>scrape</b> our website, your IP will be blocked, we recommend that you contact <a href="/cdn-cgi/l/email-protection#4c3f2d20293f0c3c2d3f38292e2522622f2321" style="color:#C03"><span class="__cf_email__" data-cfemail="dba8bab7bea89babbaa8afbeb9b2b5f5b8b4b6">[email&#160;protected]</span></a> for a possible solution.</h3>
+					<div style="text-align:right">Thanks, The Pastebin Team</div>
+				</div>
+			</div>
+		</div>
+	<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script></body>
+</html>
