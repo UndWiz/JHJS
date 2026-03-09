@@ -1,103 +1,120 @@
 """
 DEPENDENCY MANAGER
-=================
-Automatically installs and checks dependencies for CalebStudioBuilder.
-
-Features:
-- Python package management via pip
-- Optional system package support
-- Tracks installed packages in memory_manager
-- Safe installation with logging and error handling
+==================
+Automatically checks and installs Python packages, system libs, and AI frameworks.
+Designed for CalebStudioBuilder.
 """
 
 import subprocess
 import sys
-import importlib
-from core.memory_manager import MemoryManager
+import os
 
 class DependencyManager:
 
-    def __init__(self, memory: MemoryManager):
-        self.memory = memory
-
-    def is_installed(self, package_name):
-        try:
-            importlib.import_module(package_name)
-            return True
-        except ImportError:
-            return False
-
-    def install_python_package(self, package_name, version=None):
-        pkg = f"{package_name}=={version}" if version else package_name
-        if self.is_installed(package_name):
-            print(f"[INFO] {pkg} already installed.")
-            self.memory.add_dependency(pkg)
-            return True
-
-        print(f"[INFO] Installing {pkg}...")
-        try:
-            subprocess.check_call([sys.executable, "-m", "pip", "install", pkg])
-            self.memory.add_dependency(pkg)
-            print(f"[SUCCESS] Installed {pkg}")
-            return True
-        except subprocess.CalledProcessError as e:
-            print(f"[ERROR] Failed to install {pkg}: {e}")
-            return False
-
-    def install_system_package(self, package_name):
-        """
-        Example: sudo apt install package_name -y
-        """
-        print(f"[INFO] Installing system package {package_name}...")
-        try:
-            subprocess.check_call(["sudo", "apt", "install", package_name, "-y"])
-            print(f"[SUCCESS] Installed system package {package_name}")
-            self.memory.add_dependency(package_name)
-            return True
-        except subprocess.CalledProcessError as e:
-            print(f"[ERROR] Failed to install system package {package_name}: {e}")
-            return False
-
-    def install_core_dependencies(self):
-        """
-        List all Python & system packages required by the studio
-        """
-        python_packages = [
+    def __init__(self):
+        self.python_packages = [
             "torch",
             "diffusers",
             "transformers",
+            "accelerate",
+            "onnxruntime",
+            "faiss-cpu",
             "chromadb",
-            "fastapi",
-            "uvicorn",
-            "requests",
-            "pillow",
             "opencv-python",
             "tqdm",
-            "rich",
-            "PySimpleGUI",
-            "scipy",
-            "scikit-learn",
-            "matplotlib",
-            "accelerate"
+            "sentence-transformers",
+            "gradio"
         ]
-
-        system_packages = [
+        self.system_packages = [
             "git",
+            "wget",
+            "curl",
             "ffmpeg",
-            "imagemagick"
+            "python3-venv",
+            "build-essential"
         ]
 
-        print("[INFO] Installing Python packages...")
-        for pkg in python_packages:
-            self.install_python_package(pkg)
+    # ------------------------------
+    # 1. Check Python packages
+    # ------------------------------
+    def check_python_package(self, package):
+        try:
+            __import__(package)
+            print(f"[OK] Python package {package} is installed")
+            return True
+        except ImportError:
+            print(f"[MISSING] Python package {package}")
+            return False
 
-        print("[INFO] Installing system packages...")
-        for spkg in system_packages:
-            self.install_system_package(spkg)
+    # ------------------------------
+    # 2. Install Python package
+    # ------------------------------
+    def install_python_package(self, package):
+        print(f"[INSTALLING] {package} via pip...")
+        subprocess.run([sys.executable, "-m", "pip", "install", package], check=True)
 
-        print("[INFO] All core dependencies processed.")
+    # ------------------------------
+    # 3. Check all Python packages
+    # ------------------------------
+    def check_all_python(self):
+        for pkg in self.python_packages:
+            if not self.check_python_package(pkg):
+                self.install_python_package(pkg)
 
+    # ------------------------------
+    # 4. Check system packages
+    # ------------------------------
+    def check_system_package(self, package):
+        result = subprocess.run(["which", package], capture_output=True)
+        if result.returncode == 0:
+            print(f"[OK] System package {package} is installed")
+            return True
+        else:
+            print(f"[MISSING] System package {package}")
+            return False
+
+    # ------------------------------
+    # 5. Suggest install for missing system packages
+    # ------------------------------
+    def install_system_package(self, package):
+        print(f"[ACTION REQUIRED] Please install {package} via your package manager (apt/yum/pacman)")
+
+    # ------------------------------
+    # 6. Check all system packages
+    # ------------------------------
+    def check_all_system(self):
+        for pkg in self.system_packages:
+            if not self.check_system_package(pkg):
+                self.install_system_package(pkg)
+
+    # ------------------------------
+    # 7. Verify GPU / AI framework
+    # ------------------------------
+    def check_gpu(self):
+        try:
+            import torch
+            if torch.cuda.is_available():
+                print(f"[GPU DETECTED] {torch.cuda.get_device_name(0)}")
+            else:
+                print("[INFO] No CUDA GPU detected, will use CPU")
+        except Exception as e:
+            print(f"[ERROR] GPU check failed: {e}")
+
+    # ------------------------------
+    # 8. Run full dependency check
+    # ------------------------------
+    def run_full_check(self):
+        print("[INFO] Checking system packages...")
+        self.check_all_system()
+        print("[INFO] Checking Python packages...")
+        self.check_all_python()
+        print("[INFO] Checking GPU / AI frameworks...")
+        self.check_gpu()
+        print("[SUCCESS] Dependency check complete!")
+
+# ------------------------------
+# 9. Run as script
+# ------------------------------
 if __name__ == "__main__":
-    mm = MemoryManager()
-    dm = DependencyManager(mm)
-    dm.install_core_dependencies()
+    dm = DependencyManager()
+    dm.run_full_check()

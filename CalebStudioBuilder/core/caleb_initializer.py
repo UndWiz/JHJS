@@ -6,9 +6,9 @@ Sets up memory, dependencies, folder structure, and optional Cloud Mentor integr
 """
 
 import os
-from core.memory_manager import MemoryManager
-from core.file_manager import FileManager
-from core.dependency_manager import DependencyManager
+from memory_manager import MemoryManager
+from file_manager import FileManager
+from dependency_manager import DependencyManager
 
 class CalebInitializer:
 
