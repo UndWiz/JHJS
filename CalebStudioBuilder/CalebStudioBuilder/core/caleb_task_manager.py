@@ -9,7 +9,7 @@ import os
 import subprocess
 from queue import Queue
 from threading import Thread
-from memory_manager import MemoryManager
+from core.memory_manager import MemoryManager
 
 class TaskManager:
 
