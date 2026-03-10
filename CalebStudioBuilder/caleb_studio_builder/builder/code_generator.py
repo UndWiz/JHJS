@@ -1,9 +1,11 @@
 import requests
 import json
 import re
+import textwrap
 
 class CodeGenerator:
     def __init__(self):
+        # Concatenated so the chat UI doesn't format it as a clickable link
         self.endpoint = "http://" + "127.0.0.1:11434" + "/api/generate"
         self.default_model = "qwen2.5-coder:7b"
         
@@ -53,13 +55,11 @@ class CodeGenerator:
             return f"<ask_user>Local inference failed: {str(e)}</ask_user>", [], self.default_model
 
     def _clean_markdown(self, text):
-        text = text.strip()
-        lines = text.split('\n')
-        if lines and lines[0].strip().startswith("```"):
-            lines = lines[1:]
-        if lines and lines[-1].strip().startswith("```"):
-            lines = lines[:-1]
-        return '\n'.join(lines)
+        # Strict extraction: If backticks exist, rip out ONLY what is inside them
+        match = re.search(r"```[a-zA-Z]*\n(.*?)```", text, re.DOTALL)
+        code = match.group(1) if match else text
+        # textwrap.dedent mathematically strips out the fake XML padding spaces
+        return textwrap.dedent(code).strip('\n')
 
     def parse_tools(self, ai_response):
         commands = []

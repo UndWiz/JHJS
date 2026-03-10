@@ -9,7 +9,7 @@
 ## `caleb_studio_builder/builder/code_generator.py`
 - **Classes:** CodeGenerator
 - **Functions:** __init__, generate_response, _clean_markdown, parse_tools
-- **Dependencies:** json, requests, re
+- **Dependencies:** json, requests, re, textwrap
 
 ## `caleb_studio_builder/builder/dependency_installer.py`
 - **Classes:** DependencyInstaller
@@ -26,7 +26,7 @@
 ## `caleb_studio_builder/core/agent_controller.py`
 - **Classes:** AgentController
 - **Functions:** __init__, update_config, set_modes, _check_hardware_limits, process_user_input, _execution_loop
-- **Dependencies:** caleb_studio_builder.builder.code_generator, caleb_studio_builder.utils.shell_runner, sys, caleb_studio_builder.core.code_indexer, os, caleb_studio_builder.core.memory_manager, caleb_studio_builder.utils.hardware_monitor, caleb_studio_builder.core.file_manager
+- **Dependencies:** caleb_studio_builder.core.file_manager, caleb_studio_builder.builder.code_generator, os, caleb_studio_builder.core.code_indexer, caleb_studio_builder.utils.hardware_monitor, caleb_studio_builder.core.memory_manager, caleb_studio_builder.utils.shell_runner, sys
 
 ## `caleb_studio_builder/core/code_indexer.py`
 - **Classes:** CodeIndexer
@@ -36,7 +36,7 @@
 ## `caleb_studio_builder/core/file_manager.py`
 - **Classes:** FileManager
 - **Functions:** __init__, _secure_path, _backup_file, read_file, generate_diff, write_file, patch_file
-- **Dependencies:** difflib, shutil, datetime, os
+- **Dependencies:** shutil, datetime, difflib, os
 
 ## `caleb_studio_builder/core/memory_manager.py`
 - **Classes:** MemoryManager
@@ -68,7 +68,7 @@
 ## `caleb_studio_builder/ui/filesystem_panel.py`
 - **Classes:** FilesystemPanel
 - **Functions:** __init__, _expand_all, _collapse_all
-- **Dependencies:** PyQt5.QtWidgets, PyQt5.QtCore
+- **Dependencies:** PyQt5.QtCore, PyQt5.QtWidgets
 
 ## `caleb_studio_builder/ui/logs_panel.py`
 - **Classes:** LogsPanel
@@ -78,7 +78,7 @@
 ## `caleb_studio_builder/ui/settings_panel.py`
 - **Classes:** SettingsPanel
 - **Functions:** __init__, get_config
-- **Dependencies:** PyQt5.QtWidgets, PyQt5.QtCore
+- **Dependencies:** PyQt5.QtCore, PyQt5.QtWidgets
 
 ## `caleb_studio_builder/utils/__init__.py`
 
@@ -90,12 +90,12 @@
 ## `caleb_studio_builder/utils/hardware_monitor.py`
 - **Classes:** HardwareMonitor
 - **Functions:** __init__, get_stats, _get_vram_usage
-- **Dependencies:** subprocess, psutil, os
+- **Dependencies:** subprocess, os, psutil
 
 ## `caleb_studio_builder/utils/logger.py`
 - **Classes:** CalebLogger
 - **Functions:** __init__, info, warning, error
-- **Dependencies:** datetime, logging, os
+- **Dependencies:** os, datetime, logging
 
 ## `caleb_studio_builder/utils/shell_runner.py`
 - **Classes:** ShellRunner
@@ -107,10 +107,11 @@
 ## `main.py`
 - **Classes:** AITaskThread, CalebStudio
 - **Functions:** __init__, run, kill, __init__, init_ui, load_file_to_editor, save_current_file, update_modes, init_timers, update_hardware_stats, handle_input, emergency_stop, on_task_complete, load_workspace_state, closeEvent
-- **Dependencies:** PyQt5.QtWidgets, caleb_studio_builder.ui.logs_panel, caleb_studio_builder.ui.filesystem_panel, sys, os, json, caleb_studio_builder.core.agent_controller, caleb_studio_builder.ui.settings_panel, caleb_studio_builder.utils.hardware_monitor, PyQt5.QtCore, caleb_studio_builder.ui.chat_input_box
+- **Dependencies:** PyQt5.QtCore, caleb_studio_builder.ui.settings_panel, caleb_studio_builder.ui.chat_input_box, caleb_studio_builder.core.agent_controller, caleb_studio_builder.ui.filesystem_panel, os, caleb_studio_builder.ui.logs_panel, caleb_studio_builder.utils.hardware_monitor, PyQt5.QtWidgets, json, sys
 
 ## `my_tool.py`
-- **[!] Error:** Syntax Error during AST parsing.
+- **Functions:** main
+- **Dependencies:** argparse, sys
 
 ## `patch_code_generator_tools.py`
 - **Dependencies:** re
