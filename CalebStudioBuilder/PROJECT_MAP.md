@@ -8,8 +8,8 @@
 
 ## `caleb_studio_builder/builder/code_generator.py`
 - **Classes:** CodeGenerator
-- **Functions:** __init__, _determine_route, generate_response, parse_tools
-- **Dependencies:** re, requests, json
+- **Functions:** __init__, generate_response, _clean_markdown, parse_tools
+- **Dependencies:** json, requests, re
 
 ## `caleb_studio_builder/builder/dependency_installer.py`
 - **Classes:** DependencyInstaller
@@ -26,32 +26,32 @@
 ## `caleb_studio_builder/core/agent_controller.py`
 - **Classes:** AgentController
 - **Functions:** __init__, update_config, set_modes, _check_hardware_limits, process_user_input, _execution_loop
-- **Dependencies:** sys, caleb_studio_builder.core.file_manager, caleb_studio_builder.core.code_indexer, os, caleb_studio_builder.utils.shell_runner, caleb_studio_builder.builder.code_generator, caleb_studio_builder.core.memory_manager, caleb_studio_builder.utils.hardware_monitor
+- **Dependencies:** caleb_studio_builder.builder.code_generator, caleb_studio_builder.utils.shell_runner, sys, caleb_studio_builder.core.code_indexer, os, caleb_studio_builder.core.memory_manager, caleb_studio_builder.utils.hardware_monitor, caleb_studio_builder.core.file_manager
 
 ## `caleb_studio_builder/core/code_indexer.py`
 - **Classes:** CodeIndexer
 - **Functions:** __init__, scan_project, _analyze_python_file, _generate_project_map
-- **Dependencies:** os, ast
+- **Dependencies:** ast, os
 
 ## `caleb_studio_builder/core/file_manager.py`
 - **Classes:** FileManager
 - **Functions:** __init__, _secure_path, _backup_file, read_file, generate_diff, write_file, patch_file
-- **Dependencies:** datetime, shutil, os, difflib
+- **Dependencies:** difflib, shutil, datetime, os
 
 ## `caleb_studio_builder/core/memory_manager.py`
 - **Classes:** MemoryManager
 - **Functions:** __init__, _initialize_database, log_chat, log_execution, get_recent_context
-- **Dependencies:** sqlite3, os, datetime
+- **Dependencies:** datetime, sqlite3, os
 
 ## `caleb_studio_builder/core/model_scanner.py`
 - **Classes:** ModelScanner
 - **Functions:** __init__, scan_local_gguf, scan_ollama, get_all_active_engines
-- **Dependencies:** os, glob, requests
+- **Dependencies:** glob, requests, os
 
 ## `caleb_studio_builder/core/task_planner.py`
 - **Classes:** TaskPlanner
 - **Functions:** __init__, create_plan, enqueue_task, get_next_task
-- **Dependencies:** datetime, os, json
+- **Dependencies:** json, datetime, os
 
 ## `caleb_studio_builder/templates/header_template.py`
 
@@ -68,17 +68,17 @@
 ## `caleb_studio_builder/ui/filesystem_panel.py`
 - **Classes:** FilesystemPanel
 - **Functions:** __init__, _expand_all, _collapse_all
-- **Dependencies:** PyQt5.QtCore, PyQt5.QtWidgets
+- **Dependencies:** PyQt5.QtWidgets, PyQt5.QtCore
 
 ## `caleb_studio_builder/ui/logs_panel.py`
 - **Classes:** LogsPanel
 - **Functions:** __init__, append_log, _render_log, _apply_filter
-- **Dependencies:** PyQt5.QtGui, PyQt5.QtWidgets
+- **Dependencies:** PyQt5.QtWidgets, PyQt5.QtGui
 
 ## `caleb_studio_builder/ui/settings_panel.py`
 - **Classes:** SettingsPanel
 - **Functions:** __init__, get_config
-- **Dependencies:** PyQt5.QtCore, PyQt5.QtWidgets
+- **Dependencies:** PyQt5.QtWidgets, PyQt5.QtCore
 
 ## `caleb_studio_builder/utils/__init__.py`
 
@@ -90,22 +90,27 @@
 ## `caleb_studio_builder/utils/hardware_monitor.py`
 - **Classes:** HardwareMonitor
 - **Functions:** __init__, get_stats, _get_vram_usage
-- **Dependencies:** subprocess, os, psutil
+- **Dependencies:** subprocess, psutil, os
 
 ## `caleb_studio_builder/utils/logger.py`
 - **Classes:** CalebLogger
 - **Functions:** __init__, info, warning, error
-- **Dependencies:** logging, os, datetime
+- **Dependencies:** datetime, logging, os
 
 ## `caleb_studio_builder/utils/shell_runner.py`
 - **Classes:** ShellRunner
 - **Functions:** __init__, execute
 - **Dependencies:** subprocess, os
 
+## `caleb_test_app/app.py`
+
 ## `main.py`
 - **Classes:** AITaskThread, CalebStudio
-- **Functions:** __init__, run, kill, __init__, init_ui, load_file_to_editor, handle_input, on_task_complete, init_timers, update_stats, load_workspace_state, closeEvent
-- **Dependencies:** PyQt5.QtCore, sys, caleb_studio_builder.ui.filesystem_panel, os, json, caleb_studio_builder.utils.hardware_monitor, caleb_studio_builder.ui.logs_panel, caleb_studio_builder.ui.settings_panel, caleb_studio_builder.core.agent_controller, caleb_studio_builder.ui.chat_input_box, PyQt5.QtWidgets
+- **Functions:** __init__, run, kill, __init__, init_ui, load_file_to_editor, save_current_file, update_modes, init_timers, update_hardware_stats, handle_input, emergency_stop, on_task_complete, load_workspace_state, closeEvent
+- **Dependencies:** PyQt5.QtWidgets, caleb_studio_builder.ui.logs_panel, caleb_studio_builder.ui.filesystem_panel, sys, os, json, caleb_studio_builder.core.agent_controller, caleb_studio_builder.ui.settings_panel, caleb_studio_builder.utils.hardware_monitor, PyQt5.QtCore, caleb_studio_builder.ui.chat_input_box
+
+## `my_tool.py`
+- **[!] Error:** Syntax Error during AST parsing.
 
 ## `patch_code_generator_tools.py`
 - **Dependencies:** re

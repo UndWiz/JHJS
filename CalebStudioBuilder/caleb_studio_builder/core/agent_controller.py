@@ -52,16 +52,16 @@ class AgentController:
             self.memory.log_chat("system", f"Execution blocked: {hw_msg}")
             return "", [hw_msg]
             
-        return self._execution_loop(user_text, log_callback, attempt=1)
+        return self._execution_loop(user_text, log_callback, attempt=1, current_role="coder")
 
-    def _execution_loop(self, prompt, log_callback, attempt=1):
+    def _execution_loop(self, prompt, log_callback, attempt=1, current_role="coder"):
         context = self.memory.get_recent_context(limit=10)
         formatted_context = "\n".join([f"{msg['role']}: {msg['message']}" for msg in context])
         
-        ai_raw, _, model_used = self.ai.generate_response(prompt, context=formatted_context, hybrid_enabled=self.hybrid_mode)
+        ai_raw, _, model_used = self.ai.generate_response(prompt, context=formatted_context, hybrid_enabled=self.hybrid_mode, role=current_role)
         self.memory.log_chat("assistant", ai_raw)
         
-        if log_callback: log_callback(f"[SYS] Inference complete. Engine used: {model_used}")
+        if log_callback: log_callback(f"[SYS] {current_role.capitalize()} Inference complete.")
         
         commands = self.ai.parse_tools(ai_raw)
         results = []
@@ -86,13 +86,6 @@ class AgentController:
                 results.append(f"{prefix} {cmd['path']}: {res}")
                 if not self.preview_mode: self.indexer.scan_project()
 
-            elif tool == "append_file":
-                if not self.preview_mode:
-                    self.files.append_file(cmd["path"], "\n" + cmd["content"])
-                    results.append(f"[APPENDED] {cmd['path']}")
-                else:
-                    results.append(f"[PREVIEW APPEND] {cmd['path']}")
-                
             elif tool == "run_command":
                 if self.sandbox_mode:
                     results.append(f"[SANDBOX BLOCKED] Command execution prevented: {cmd['cmd']}")
@@ -100,12 +93,26 @@ class AgentController:
                 res = self.shell.execute(cmd["cmd"])
                 self.memory.log_execution(cmd["cmd"], res["stdout"], res["stderr"], res["exit_code"])
                 if res["exit_code"] == 0:
-                    results.append(f"[CMD SUCCESS]: {cmd['cmd']}")
+                    out_text = res["stdout"].strip()
+                    if out_text:
+                        results.append(f"[CMD SUCCESS]: {cmd['cmd']}\nOutput:\n{out_text}")
+                    else:
+                        results.append(f"[CMD SUCCESS]: {cmd['cmd']}")
                 else:
                     error_msg = f"[CMD FAILED]: {cmd['cmd']}\nError: {res['stderr']}"
                     results.append(error_msg)
                     needs_repair = True
-                    repair_prompt = f"The command `{cmd['cmd']}` returned exit code {res['exit_code']} with stderr:\n{res['stderr']}\nFix the code using <patch_file> or <write_file> and run it again."
+                    repair_prompt = f"The command `{cmd['cmd']}` failed. Error:\n{res['stderr']}\nFix the code and test again."
+
+            elif tool == "load_template":
+                template_path = os.path.join(self.project_root, "caleb_studio_builder", "templates", f"{cmd['name']}.py.tpl")
+                if os.path.exists(template_path):
+                    content = self.files.read_file(template_path)
+                    # Inject the template directly into the agent's memory for the next thought cycle
+                    self.memory.log_chat("system", f"TEMPLATE LOADED ({cmd['name']}):\n{content}\nNow use <write_file> to fill in the variables and save it.")
+                    results.append(f"[TEMPLATE INJECTED] {cmd['name']} loaded into context. Issue command again to write.")
+                else:
+                    results.append(f"[TEMPLATE FAILED] {cmd['name']}.py.tpl not found.")
 
             elif tool == "create_folder":
                 target = self.files._secure_path(cmd["path"])
@@ -121,8 +128,6 @@ class AgentController:
                     if os.path.exists(target):
                         os.remove(target)
                         results.append(f"[DELETED] {cmd['path']}")
-                    else:
-                        results.append(f"[DELETE FAILED] File not found: {cmd['path']}")
                 else:
                     results.append(f"[PREVIEW DELETE] {cmd['path']}")
 
@@ -130,36 +135,16 @@ class AgentController:
                 content = self.files.read_file(cmd["path"])
                 truncated = content[:2000] + "... [TRUNCATED]" if len(content) > 2000 else content
                 self.memory.log_chat("system", f"Content of {cmd['path']}:\n{truncated}")
-                results.append(f"[READ] {cmd['path']} (Loaded into context memory)")
+                results.append(f"[READ] {cmd['path']} (Loaded into memory)")
 
-            elif tool == "list_dir":
-                target = self.files._secure_path(cmd["path"])
-                try:
-                    contents = os.listdir(target)
-                    self.memory.log_chat("system", f"Directory {cmd['path']} contents:\n{', '.join(contents)}")
-                    results.append(f"[LIST DIR] {cmd['path']} mapped to context.")
-                except Exception as e:
-                    results.append(f"[LIST FAILED] {cmd['path']}: {str(e)}")
-
-            elif tool == "search_codebase":
-                target = self.files._secure_path(cmd["path"])
-                res = self.shell.execute(f"grep -rnw '{target}' -e '{cmd['pattern']}'")
-                if res['exit_code'] == 0:
-                    self.memory.log_chat("system", f"Search results for {cmd['pattern']}:\n{res['stdout'][:2000]}")
-                    results.append(f"[SEARCH SUCCESS] Found '{cmd['pattern']}' in {cmd['path']}")
-                else:
-                    results.append(f"[SEARCH FAILED] Pattern '{cmd['pattern']}' not found.")
-
-            elif tool == "ask_user":
-                results.append(f"[AI QUESTION] {cmd['question']}")
-                if log_callback: log_callback(f"[!] AI requires input: {cmd['question']}")
-
+        # The Verifier Loop Upgrade
         if needs_repair and attempt <= 3:
-            if log_callback: log_callback(f"[!] Warning: Execution failed. Initializing Self-Repair Loop (Attempt {attempt}/3)...")
+            if log_callback: log_callback(f"[!] Engaging VERIFIER Agent. Self-Repair Loop (Attempt {attempt}/3)...")
             self.memory.log_chat("system", repair_prompt)
-            _, repair_results = self._execution_loop(repair_prompt, log_callback, attempt=attempt + 1)
+            # Recursively call execution loop, but forcefully swap the personality to "verifier"
+            _, repair_results = self._execution_loop(repair_prompt, log_callback, attempt=attempt + 1, current_role="verifier")
             results.extend(repair_results)
         elif needs_repair and attempt > 3:
-            if log_callback: log_callback("[!] Fatal: Self-Repair exhausted maximum attempts (3). Halting execution sequence.")
+            if log_callback: log_callback("[!] Fatal: Verifier exhausted 3 attempts. Halting.")
 
         return ai_raw, results
