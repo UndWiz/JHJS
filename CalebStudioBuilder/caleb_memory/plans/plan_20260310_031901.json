@@ -1,0 +1,10 @@
+{
+    "objective": "Bootstrap GUI",
+    "status": "pending",
+    "steps": [
+        "Build top bar",
+        "Build splitters",
+        "Link logs"
+    ],
+    "created_at": "20260310_031901"
+}
